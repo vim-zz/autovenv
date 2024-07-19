@@ -1,0 +1,21 @@
+# !/bin/zsh
+
+function autovenv() {
+    MYVENV=.venv
+    local found=0
+    local current_dir=$PWD
+
+    while [[ "$current_dir" != "/" ]]; do
+        if [[ -d "$current_dir/$MYVENV" ]]; then
+            source "$current_dir/$MYVENV/bin/activate" > /dev/null 2>&1
+            found=1
+            break
+        fi
+        # Shorten the path by removing the last component
+        current_dir=$(dirname "$current_dir")
+    done
+
+    # When no virtual environment is found
+    [[ $found -eq 0 ]] && deactivate > /dev/null 2>&1
+}
+chpwd_functions=(autovenv)
